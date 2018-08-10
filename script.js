@@ -6,8 +6,23 @@ new Vue({
         finishedLink: '<a href="https://www.google.com">Google</a>',
         counter: 0,
         x: 0,
-        y: 0
+        y: 0,
+        name: 'Marco',
+        attachRed: false,
+        color: 'green'
     },
+    computed: {
+        divClasses: function () {
+            return {
+                red: this.attachRed,
+                blue: !this.attachRed
+            };
+        }
+    },
+    // watch: {
+    //     //Run asynchronous functions
+    //     console.log('Run asynchronous code');
+    // },
     methods: {
         sayHello: function () {
             this.title = 'Hello!';
@@ -25,5 +40,3 @@ new Vue({
         }
     }
 });
-
-// LECTURE 15: TWO-WAY BINDING
