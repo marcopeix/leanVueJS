@@ -1,14 +1,8 @@
 <template>
-  <div id="app">
-    <h1>Hello world!</h1>
-  </div>
+  <app-server-status></app-server-status>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-}
 </script>
 
 <style>
