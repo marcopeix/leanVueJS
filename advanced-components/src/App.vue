@@ -6,9 +6,11 @@
                 <button @click="selectedComponent = 'appAuthor'">Author</button>
                 <button @click="selectedComponent = 'appNew'">New</button>
                 <hr>
-                <component :is="selectedComponent">
-                    <p>Default content</p>
-                </component>
+                <keep-alive>
+                    <component :is="selectedComponent">
+                        <p>Default content</p>
+                    </component>
+                </keep-alive>
             </div>
         </div>
     </div>
