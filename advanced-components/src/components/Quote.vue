@@ -17,4 +17,8 @@ export default {
         margin: 30px auto;
         text-align: center;
     }
+
+    h2 {
+        color: red;
+    }
 </style>
