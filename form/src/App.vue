@@ -28,7 +28,7 @@
                                 type="number"
                                 id="age"
                                 class="form-control"
-                                v-model="userData.age">
+                                v-model.number="userData.age">
                     </div>
 
                 </div>
