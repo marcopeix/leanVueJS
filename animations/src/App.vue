@@ -37,6 +37,49 @@
           <div v-if="show" class="alert alert-info" key="info">Some info</div>
           <div v-if="show" class="alert alert-warning" key="warning">Some warning</div>
         </transition>
+
+        <hr>
+
+        <button class="btn btn-primary" @click="load = !load">Load / Remove element</button>
+        <br><br>
+
+        <transition
+          @before-enter="beforeEnter"
+          @enter="enter"
+          @after-enter="afterEnter"
+          @enter-cancelled="enterCancelled"
+          
+          @before-leave="beforeLeave"
+          @leave="leave"
+          @after-leave="afterLeave"
+          @leave-cancelled="leaveCancelled"
+          :css="false">
+          <div style="width: 300px; height:100px; background-color:lightgreen" v-if="load"></div>
+        </transition>
+
+        <hr>
+        <button class="btn btn-primary" @click="selectedComponent == 'success-alert' ? selectedComponent = 'danger-alert' : selectedComponent = 'success-alert'">Toggle components</button>
+        <br><br>
+        <transition name="fade" mode="out-in">
+          <component :is="selectedComponent"></component>
+        </transition>
+
+        <hr>
+
+        <button class="btn btn-primary" @click="addItem">Add item</button>
+
+        <br><br>
+
+        <ul class="list-group">
+          <transition-group name="slide">
+            <li
+              class="list-group-item"
+              v-for="(number, index) in numbers"
+              @click="removeItem(index)"
+              style="cursor: pointer"
+              :key="number">{{ number }}</li>
+          </transition-group>
+        </ul>
       
       </div>
     </div>
@@ -45,12 +88,91 @@
 
 <script>
 
+import dangerAlert from './DangerAlert';
+import successAlert from './SuccessAlert';
+
 export default {
   data () {
     return {
-      show: true,
-      alertAnimation: 'fade'
+      show: false,
+      alertAnimation: 'fade',
+      load: true,
+      elementWidth: 100,
+      selectedComponent: 'success-alert',
+      numbers: [1, 2, 3, 4, 5]
     }
+  },
+  methods: {
+    beforeEnter(el) {
+      console.log('beforeEnter');
+
+      this.elementWidth = 100;
+      el.style.width = this.elementWidth + 'px';
+    },
+    enter(el, done) {
+      console.log('enter');
+
+      let round = 1;
+
+      const interval = setInterval(() => {
+
+        el.style.width = (this.elementWidth + round * 10) + 'px';
+        round++;
+        if (round > 20) {
+
+          clearInterval(interval);
+          done();
+
+        }
+
+      }, 20);
+    },
+    afterEnter(el) {
+      console.log('afterEnter');
+    },
+    enterCancelled(el) {
+      console.log('enterCancelled');
+    },
+    beforeLeave(el) {
+      console.log('beforeLeave');
+
+      this.elementWidth = 300;
+      el.style.width = this.elementWidth + 'px';
+    },
+    leave(el, done) {
+      console.log('leave');
+      let round = 1;
+
+      const interval = setInterval(() => {
+
+        el.style.width = (this.elementWidth - round * 10) + 'px';
+        round++;
+        if (round > 20) {
+
+          clearInterval(interval);
+          done();
+
+        }
+
+      }, 20);
+    },
+    afterLeave(el) {
+      console.log('afterLeave');
+    },
+    leaveCancelled(el) {
+      console.log('leaveCancelled');
+    },
+    addItem() {
+      const pos = Math.floor(Math.random() * this.numbers.length);
+      this.numbers.splice(pos, 0, this.numbers.length + 1);
+    },
+    removeItem(index) {
+      this.numbers.splice(index, 1);
+    }
+  },
+  components: {
+    dangerAlert: dangerAlert,
+    successAlert: successAlert
   }
 }
 </script>
@@ -90,6 +212,11 @@ export default {
     animation: slide-out .5s ease-out forwards;
     transition: opacity 0.5s;
     opacity: 0;
+    position: absolute;
+  }
+
+  .slide-move {
+    transition: transform .5s;
   }
 
   @keyframes slide-in {
